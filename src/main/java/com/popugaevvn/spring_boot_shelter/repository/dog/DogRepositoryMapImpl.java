@@ -1,5 +1,6 @@
 package com.popugaevvn.spring_boot_shelter.repository.dog;
 
+import com.popugaevvn.spring_boot_shelter.exceptions.NotFoundEntityException;
 import com.popugaevvn.spring_boot_shelter.models.Dog;
 import org.springframework.stereotype.Repository;
 
@@ -14,35 +15,40 @@ public class DogRepositoryMapImpl implements DogRepository {
 
     private final Map<Integer, Dog> dogList = new HashMap<>();
 
+    {
+        dogList.put(++DOG_COUNT, new Dog("Mark", (byte) 5, "The best dog in the world"));
+        dogList.put(++DOG_COUNT, new Dog("Ray", (byte) 12, "The second best dog in the world"));
+        dogList.put(++DOG_COUNT, new Dog("Banny", (byte) 5, "The thrid best dog in the world"));
+    }
+
     @Override
     public List<Dog> index() {
         return dogList.values().stream().toList();
     }
 
-    // TODO: add own type of error
     @Override
     public Dog getDogById(int id) {
         Dog dog = dogList.get(id);
 
         if (dog == null) {
-            throw new IllegalArgumentException("Not found dog with id = " + id);
+            throw new NotFoundEntityException("Not found dog with id = " + id);
         }
 
         return dog;
     }
 
     @Override
+    // TODO: create checking on existing of dog in memory
     public void save(Dog dog) {
         dog.setId(++DOG_COUNT);
         dogList.put(dog.getId(), dog);
     }
 
-    // TODO: add own type of error
     @Override
     public Dog updateDog(Dog updatedDog) {
         Dog notUpdatedDog = dogList.get(updatedDog.getId());
 
-        if (notUpdatedDog == null) throw new IllegalArgumentException("Not found dog with id = " + updatedDog.getId());
+        if (notUpdatedDog == null) throw new NotFoundEntityException("Not found dog with id = " + updatedDog.getId());
 
         dogList.put(notUpdatedDog.getId(), updatedDog);
 

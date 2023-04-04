@@ -1,5 +1,6 @@
 package com.popugaevvn.spring_boot_shelter.repository.shelter;
 
+import com.popugaevvn.spring_boot_shelter.exceptions.NotFoundEntityException;
 import com.popugaevvn.spring_boot_shelter.models.Dog;
 import com.popugaevvn.spring_boot_shelter.models.Shelter;
 import org.springframework.stereotype.Repository;
@@ -18,13 +19,12 @@ public class ShelterRepositoryMapImpl implements ShelterRepository {
         return shelterList.values().stream().toList();
     }
 
-    // TODO: add own type of error
     @Override
     public Shelter getShelterById(int id) {
         Shelter shelter = shelterList.get(id);
 
         if (shelter == null) {
-            throw new IllegalArgumentException("Not found shelter with id = " + id);
+            throw new NotFoundEntityException("Not found shelter with id = " + id);
         }
 
         return shelter;
@@ -35,24 +35,22 @@ public class ShelterRepositoryMapImpl implements ShelterRepository {
         shelterList.put(shelter.getId(), shelter);
     }
 
-    // TODO: add own type of error
     @Override
     public Shelter updateShelter(Shelter updatedShelter) {
         Shelter notUpdatedShelter = shelterList.get(updatedShelter.getId());
 
-        if (notUpdatedShelter == null) throw new IllegalArgumentException("Not found shelter with id = " + updatedShelter.getId());
+        if (notUpdatedShelter == null) throw new NotFoundEntityException("Not found shelter with id = " + updatedShelter.getId());
 
         shelterList.put(notUpdatedShelter.getId(), updatedShelter);
 
         return updatedShelter;
     }
 
-    // TODO: add own type of error
     @Override
     public List<Dog> getDogsFromShelter(int shelterId) {
         Shelter shelter = shelterList.get(shelterId);
 
-        if (shelter == null) throw new IllegalArgumentException("Not found shelter with id = " + shelterId);
+        if (shelter == null) throw new NotFoundEntityException("Not found shelter with id = " + shelterId);
 
         return shelter.getDogs();
     }
