@@ -16,4 +16,6 @@ public interface DogRepository {
     void save(Dog dog);
 
     Dog updateDog(Dog updatedDog);
+
+    List<Dog> getYoungerDog(byte maxAge);
 }

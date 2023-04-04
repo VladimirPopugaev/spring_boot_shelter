@@ -10,6 +10,8 @@ import java.util.Map;
 @Repository
 public class DogRepositoryMapImpl implements DogRepository {
 
+    private static int DOG_COUNT;
+
     private final Map<Integer, Dog> dogList = new HashMap<>();
 
     @Override
@@ -31,6 +33,7 @@ public class DogRepositoryMapImpl implements DogRepository {
 
     @Override
     public void save(Dog dog) {
+        dog.setId(++DOG_COUNT);
         dogList.put(dog.getId(), dog);
     }
 
@@ -44,5 +47,12 @@ public class DogRepositoryMapImpl implements DogRepository {
         dogList.put(notUpdatedDog.getId(), updatedDog);
 
         return updatedDog;
+    }
+
+    @Override
+    public List<Dog> getYoungerDog(byte maxAge) {
+        return dogList.values().stream()
+                .filter((dog) -> dog.getAge() < maxAge)
+                .toList();
     }
 }
