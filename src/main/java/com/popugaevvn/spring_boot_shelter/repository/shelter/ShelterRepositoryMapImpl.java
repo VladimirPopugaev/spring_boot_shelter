@@ -12,6 +12,8 @@ import java.util.Map;
 @Repository
 public class ShelterRepositoryMapImpl implements ShelterRepository {
 
+    private static int SHELTER_COUNT;
+
     private final Map<Integer, Shelter> shelterList = new HashMap<>();
 
     @Override
@@ -32,6 +34,7 @@ public class ShelterRepositoryMapImpl implements ShelterRepository {
 
     @Override
     public void save(Shelter shelter) {
+        shelter.setId(++SHELTER_COUNT);
         shelterList.put(shelter.getId(), shelter);
     }
 
@@ -53,5 +56,18 @@ public class ShelterRepositoryMapImpl implements ShelterRepository {
         if (shelter == null) throw new NotFoundEntityException("Not found shelter with id = " + shelterId);
 
         return shelter.getDogs();
+    }
+
+    @Override
+    public Shelter addDogInShelter(int shelterId, Dog dog) {
+        Shelter shelter = shelterList.get(shelterId);
+
+        if (shelter == null) throw new NotFoundEntityException("Not found shelter with id = " + shelterId);
+        List<Dog> shelterDogs = shelter.getDogs();
+        shelterDogs.add(dog);
+
+        shelter.setDogs(shelterDogs);
+
+        return shelter;
     }
 }

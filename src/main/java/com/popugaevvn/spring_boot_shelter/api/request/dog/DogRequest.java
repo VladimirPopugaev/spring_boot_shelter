@@ -1,4 +1,4 @@
-package com.popugaevvn.spring_boot_shelter.api.request;
+package com.popugaevvn.spring_boot_shelter.api.request.dog;
 
 import lombok.Data;
 

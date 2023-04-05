@@ -17,4 +17,6 @@ public interface ShelterRepository {
 
     List<Dog> getDogsFromShelter(int shelterId);
 
+    Shelter addDogInShelter(int shelterId, Dog dog);
+
 }

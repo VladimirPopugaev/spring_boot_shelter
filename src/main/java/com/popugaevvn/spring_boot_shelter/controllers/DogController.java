@@ -1,7 +1,7 @@
 package com.popugaevvn.spring_boot_shelter.controllers;
 
-import com.popugaevvn.spring_boot_shelter.api.request.DogRequest;
-import com.popugaevvn.spring_boot_shelter.api.response.DogResponse;
+import com.popugaevvn.spring_boot_shelter.api.request.dog.DogRequest;
+import com.popugaevvn.spring_boot_shelter.api.response.dog.DogResponse;
 import com.popugaevvn.spring_boot_shelter.services.dog.DogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

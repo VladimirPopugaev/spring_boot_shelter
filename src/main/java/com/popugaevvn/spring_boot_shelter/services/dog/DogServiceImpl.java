@@ -1,7 +1,7 @@
 package com.popugaevvn.spring_boot_shelter.services.dog;
 
-import com.popugaevvn.spring_boot_shelter.api.request.DogRequest;
-import com.popugaevvn.spring_boot_shelter.api.response.DogResponse;
+import com.popugaevvn.spring_boot_shelter.api.request.dog.DogRequest;
+import com.popugaevvn.spring_boot_shelter.api.response.dog.DogResponse;
 import com.popugaevvn.spring_boot_shelter.models.Dog;
 import com.popugaevvn.spring_boot_shelter.repository.dog.DogRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +19,11 @@ public class DogServiceImpl implements DogService {
         Dog dog = repository.getDogById(id);
 
         return convertFromDog(dog);
+    }
+
+    @Override
+    public Dog getDogAllInfo(int id) {
+        return repository.getDogById(id);
     }
 
     @Override
@@ -43,7 +48,7 @@ public class DogServiceImpl implements DogService {
      * @return new object of `DogResponse` class
      */
     private static DogResponse convertFromDog(Dog dog) {
-        return new DogResponse(dog.getName(), dog.getDescription(), dog.getAge());
+        return new DogResponse(dog.getId(), dog.getName(), dog.getDescription(), dog.getAge());
     }
 
     /**

@@ -14,4 +14,11 @@ public class Shelter {
     private String phoneNumber;
 
     // TODO: implement user id (owner of shelter)
+    private String ownerFullName;
+
+    public Shelter(String address, String phoneNumber, String ownerFullName) {
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.ownerFullName = ownerFullName;
+    }
 }
