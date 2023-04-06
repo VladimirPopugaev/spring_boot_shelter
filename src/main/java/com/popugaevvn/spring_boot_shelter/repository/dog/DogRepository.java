@@ -18,4 +18,6 @@ public interface DogRepository {
     Dog updateDog(Dog updatedDog);
 
     List<Dog> getYoungerDog(byte maxAge);
+
+    void deleteDog(int dogId);
 }

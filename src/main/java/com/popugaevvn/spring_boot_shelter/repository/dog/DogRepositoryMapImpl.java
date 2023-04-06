@@ -2,13 +2,12 @@ package com.popugaevvn.spring_boot_shelter.repository.dog;
 
 import com.popugaevvn.spring_boot_shelter.exceptions.NotFoundEntityException;
 import com.popugaevvn.spring_boot_shelter.models.Dog;
-import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Repository
+//@Repository
 public class DogRepositoryMapImpl implements DogRepository {
 
     private static int DOG_COUNT;
@@ -60,5 +59,10 @@ public class DogRepositoryMapImpl implements DogRepository {
         return dogList.values().stream()
                 .filter((dog) -> dog.getAge() < maxAge)
                 .toList();
+    }
+
+    @Override
+    public void deleteDog(int dogId) {
+        dogList.remove(dogId);
     }
 }

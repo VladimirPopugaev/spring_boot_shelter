@@ -16,4 +16,8 @@ public interface DogService {
 
     DogResponse createDog(DogRequest dogRequest);
 
+    DogResponse updateDog(int dogId, DogRequest dogUpdated);
+
+    void deleteDog(int dogId);
+
 }

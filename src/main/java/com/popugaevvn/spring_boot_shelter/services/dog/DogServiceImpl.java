@@ -18,7 +18,7 @@ public class DogServiceImpl implements DogService {
     public DogResponse getDogById(int id) {
         Dog dog = repository.getDogById(id);
 
-        return convertFromDog(dog);
+        return convertFromDogToResponse(dog);
     }
 
     @Override
@@ -30,7 +30,7 @@ public class DogServiceImpl implements DogService {
     public List<DogResponse> getYoungerDogs(byte maxAge) {
         List<Dog> dogList = repository.getYoungerDog(maxAge);
 
-        return dogList.stream().map(DogServiceImpl::convertFromDog).toList();
+        return dogList.stream().map(DogServiceImpl::convertFromDogToResponse).toList();
     }
 
     @Override
@@ -38,7 +38,21 @@ public class DogServiceImpl implements DogService {
         Dog dog = convertToDog(dogRequest);
         repository.save(dog);
 
-        return convertFromDog(dog);
+        return convertFromDogToResponse(dog);
+    }
+
+    @Override
+    public DogResponse updateDog(int dogId, DogRequest newInfoAboutDog) {
+        Dog dogForUpdate = convertToDog(newInfoAboutDog);
+        dogForUpdate.setId(dogId);
+
+        Dog updatedDog = repository.updateDog(dogForUpdate);
+        return convertFromDogToResponse(updatedDog);
+    }
+
+    @Override
+    public void deleteDog(int dogId) {
+        repository.deleteDog(dogId);
     }
 
     /**
@@ -47,7 +61,7 @@ public class DogServiceImpl implements DogService {
      * @param dog `Dog` class
      * @return new object of `DogResponse` class
      */
-    private static DogResponse convertFromDog(Dog dog) {
+    private static DogResponse convertFromDogToResponse(Dog dog) {
         return new DogResponse(dog.getId(), dog.getName(), dog.getDescription(), dog.getAge());
     }
 
@@ -59,6 +73,4 @@ public class DogServiceImpl implements DogService {
     private static Dog convertToDog(DogRequest dogRequest) {
         return new Dog(dogRequest.getName(), dogRequest.getAge(), dogRequest.getDescription());
     }
-
-
 }

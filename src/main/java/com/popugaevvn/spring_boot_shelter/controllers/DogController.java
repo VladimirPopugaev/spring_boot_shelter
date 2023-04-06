@@ -32,6 +32,16 @@ public class DogController {
         return dogService.createDog(request);
     }
 
+    @PutMapping("/{id}")
+    public DogResponse updateDog(@PathVariable int id, @RequestBody DogRequest request) {
+        return dogService.updateDog(id, request);
+    }
 
+    @DeleteMapping("/{id}")
+    public String deleteDog(@PathVariable int id) {
+        dogService.deleteDog(id);
+
+        return "Success!";
+    }
 
 }
