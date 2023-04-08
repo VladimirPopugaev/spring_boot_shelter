@@ -33,6 +33,13 @@ public class DogServiceImpl implements DogService {
         return dogList.stream().map(DogServiceImpl::convertFromDogToResponse).toList();
     }
 
+
+    /**
+     * @deptecated
+     * This method of addition makes no sense since the dog is always connected to the shelter
+     * That's why the action of adding is done from the shelter service.
+     */
+    @Deprecated
     @Override
     public DogResponse createDog(DogRequest dogRequest) {
         Dog dog = convertToDog(dogRequest);
@@ -43,8 +50,10 @@ public class DogServiceImpl implements DogService {
 
     @Override
     public DogResponse updateDog(int dogId, DogRequest newInfoAboutDog) {
+        Dog unupdatedDog = repository.getDogById(dogId);
         Dog dogForUpdate = convertToDog(newInfoAboutDog);
-        dogForUpdate.setId(dogId);
+        dogForUpdate.setId(unupdatedDog.getId());
+        dogForUpdate.setShelter(unupdatedDog.getShelter());
 
         Dog updatedDog = repository.updateDog(dogForUpdate);
         return convertFromDogToResponse(updatedDog);

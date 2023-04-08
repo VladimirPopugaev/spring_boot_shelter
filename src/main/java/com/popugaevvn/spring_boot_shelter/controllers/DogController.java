@@ -27,7 +27,7 @@ public class DogController {
         return dogService.getDogById(id);
     }
 
-    @PostMapping()
+    //@PostMapping()
     public DogResponse createDog(@RequestBody DogRequest request) {
         return dogService.createDog(request);
     }

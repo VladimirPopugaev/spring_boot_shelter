@@ -3,13 +3,12 @@ package com.popugaevvn.spring_boot_shelter.repository.shelter;
 import com.popugaevvn.spring_boot_shelter.exceptions.NotFoundEntityException;
 import com.popugaevvn.spring_boot_shelter.models.Dog;
 import com.popugaevvn.spring_boot_shelter.models.Shelter;
-import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Repository
+//@Repository
 public class ShelterRepositoryMapImpl implements ShelterRepository {
 
     private static int SHELTER_COUNT;
@@ -51,16 +50,17 @@ public class ShelterRepositoryMapImpl implements ShelterRepository {
 
     @Override
     public List<Dog> getDogsFromShelter(int shelterId) {
-        Shelter shelter = shelterList.get(shelterId);
+        /*Shelter shelter = shelterList.get(shelterId);
 
         if (shelter == null) throw new NotFoundEntityException("Not found shelter with id = " + shelterId);
 
-        return shelter.getDogs();
+        return shelter.getDogs();*/
+        return null;
     }
 
     @Override
     public Shelter addDogInShelter(int shelterId, Dog dog) {
-        Shelter shelter = shelterList.get(shelterId);
+        /*Shelter shelter = shelterList.get(shelterId);
 
         if (shelter == null) throw new NotFoundEntityException("Not found shelter with id = " + shelterId);
         List<Dog> shelterDogs = shelter.getDogs();
@@ -68,6 +68,13 @@ public class ShelterRepositoryMapImpl implements ShelterRepository {
 
         shelter.setDogs(shelterDogs);
 
-        return shelter;
+        return shelter;*/
+
+        return null;
+    }
+
+    @Override
+    public void deleteShelter(int shelterId) {
+        shelterList.remove(shelterId);
     }
 }

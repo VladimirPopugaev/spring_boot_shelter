@@ -12,7 +12,7 @@
 
 4. Go to your browser and type `http::/localhost:8080/swagger-ui.html` in the search box. This will take you to the next page:
 
-![img.png](img.png)
+![img_1.png](img_1.png)
 
 ##### Now you can check other endpoints of my project. Thank you!
 

@@ -19,4 +19,6 @@ public interface ShelterRepository {
 
     Shelter addDogInShelter(int shelterId, Dog dog);
 
+    void deleteShelter(int shelterId);
+
 }

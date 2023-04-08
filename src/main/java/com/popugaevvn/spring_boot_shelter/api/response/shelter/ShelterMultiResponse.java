@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class ShelterMultiResponse {
 
+    private final int id;
     private final String address;
     private final String phoneNumber;
 

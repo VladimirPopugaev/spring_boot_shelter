@@ -45,12 +45,37 @@ public class ShelterServiceImpl implements ShelterService {
         return shelterToSingleResponse(shelter);
     }
 
+    @Override
+    public ShelterSingleResponse updateShelter(int shelterId, ShelterRequest infoForUpdateShelter) {
+        Shelter shelterForUpdating = shelterRequestToShelter(infoForUpdateShelter);
+        shelterForUpdating.setId(shelterId);
+
+        Shelter updatedShelter = shelterRepository.updateShelter(shelterForUpdating);
+        return shelterToSingleResponse(updatedShelter);
+    }
+
+    @Override
+    public void deleteShelter(int shelterId) {
+        shelterRepository.deleteShelter(shelterId);
+    }
+
     private static ShelterSingleResponse shelterToSingleResponse(Shelter shelter) {
-        return new ShelterSingleResponse(shelter.getAddress(), shelter.getPhoneNumber(), shelter.getDogs(), shelter.getOwnerFullName());
+        return new ShelterSingleResponse(
+                shelter.getId(),
+                shelter.getAddress(),
+                shelter.getPhoneNumber(),
+                shelter.getDogs(),
+                shelter.getOwnerFullName()
+        );
     }
 
     private static ShelterMultiResponse shelterToMultiResponse(Shelter shelter) {
-        return new ShelterMultiResponse(shelter.getAddress(), shelter.getPhoneNumber(), shelter.getOwnerFullName());
+        return new ShelterMultiResponse(
+                shelter.getId(),
+                shelter.getAddress(),
+                shelter.getPhoneNumber(),
+                shelter.getOwnerFullName()
+        );
     }
 
     private static Shelter shelterRequestToShelter(ShelterRequest request) {

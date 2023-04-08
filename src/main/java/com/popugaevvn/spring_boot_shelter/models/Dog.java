@@ -1,5 +1,6 @@
 package com.popugaevvn.spring_boot_shelter.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -18,6 +19,16 @@ public class Dog {
     @Column
     private String description;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
+    private Shelter shelter;
+
+    @Column
+    private short weight;
+
+    @Column
+    private String diseases;
+
     public Dog() {
 
     }
@@ -28,10 +39,13 @@ public class Dog {
         this.description = description;
     }
 
-    // Can be null
-    private short weight;
+    public Dog(String name, byte age, String description, Shelter shelter) {
+        this.name = name;
+        this.age = age;
+        this.description = description;
+        this.shelter = shelter;
+    }
 
-    // Can be null
-    private String diseases;
+
 
 }

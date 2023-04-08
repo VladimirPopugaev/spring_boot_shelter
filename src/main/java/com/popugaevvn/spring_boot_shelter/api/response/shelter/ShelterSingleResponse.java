@@ -8,6 +8,7 @@ import java.util.List;
 @Data
 public class ShelterSingleResponse {
 
+    private final int id;
     private final String address;
     private final String phoneNumber;
     private final List<Dog> dogList;

@@ -2,6 +2,7 @@ package com.popugaevvn.spring_boot_shelter.repository.dog;
 
 import com.popugaevvn.spring_boot_shelter.exceptions.NotFoundEntityException;
 import com.popugaevvn.spring_boot_shelter.models.Dog;
+import com.popugaevvn.spring_boot_shelter.models.Shelter;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -18,6 +19,7 @@ public class DogRepositoryHibernateImpl implements DogRepository {
             new Configuration()
                     .configure()
                     .addAnnotatedClass(Dog.class)
+                    .addAnnotatedClass(Shelter.class)
                     .buildSessionFactory();
 
     @Override

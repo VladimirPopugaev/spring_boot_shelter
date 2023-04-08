@@ -17,4 +17,8 @@ public interface ShelterService {
 
     ShelterSingleResponse addDogInShelter(int id, Dog dog);
 
+    ShelterSingleResponse updateShelter(int shelterId, ShelterRequest shelterUpdated);
+
+    void deleteShelter(int shelterId);
+
 }
