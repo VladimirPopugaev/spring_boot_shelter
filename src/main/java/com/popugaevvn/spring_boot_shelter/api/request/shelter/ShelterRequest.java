@@ -5,10 +5,12 @@ import lombok.Data;
 @Data
 public class ShelterRequest {
 
-    private final String address;
-    private final String phoneNumber;
+    private String address;
+    private String phoneNumber;
 
     // TODO: implement user id (owner of shelter)
-    private final String ownerFullName;
+    private String ownerFullName;
 
+    public ShelterRequest() {
+    }
 }

@@ -65,7 +65,6 @@ public class ShelterRepositoryHibernateImpl implements ShelterRepository {
         }
     }
 
-    // TODO: implement dog relation
     @Override
     public List<Dog> getDogsFromShelter(int shelterId) {
         try (Session session = sessionFactory.openSession()) {
@@ -80,7 +79,6 @@ public class ShelterRepositoryHibernateImpl implements ShelterRepository {
         }
     }
 
-    // TODO: implement dog relation
     @Override
     public Shelter addDogInShelter(int shelterId, Dog dog) {
         try (Session session = sessionFactory.openSession()) {

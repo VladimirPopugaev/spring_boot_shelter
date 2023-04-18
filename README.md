@@ -23,7 +23,8 @@ They have a *one to many* and *many to one* relationship.
 
 (A little later a microservice responsible for authorizing users with 
 different roles will be attached here. This microservice has already 
-been implemented. Link: https://github.com/VladimirPopugaev/auth_service_elixir). 
+been implemented. Link: https://github.com/VladimirPopugaev/auth_service_elixir).
+Interaction with the server is performed using WebClient.
 
 Depending on the user's role, some functionality of the service will be available or not available to him.
 
@@ -33,6 +34,7 @@ Depending on the user's role, some functionality of the service will be availabl
 - Assembly system: Maven 4.0
 - Architectural pattern: MVC
 - Interaction interface: RESTful
+- WebFlux: WebClient
 - DBMS: PostgreSQL 13
 - ORM framework: Hibernate 
 - Containerization: Docker

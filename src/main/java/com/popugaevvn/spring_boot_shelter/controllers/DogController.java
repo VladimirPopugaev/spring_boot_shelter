@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-// TODO: add checking on user authorization
-
 @RestController
 @RequestMapping("/dogs")
 @RequiredArgsConstructor
@@ -43,5 +41,4 @@ public class DogController {
 
         return "Success!";
     }
-
 }

@@ -10,4 +10,6 @@ class SpringBootShelterApplicationTests {
 	void contextLoads() {
 	}
 
+	// TODO: write tests for services
+
 }
