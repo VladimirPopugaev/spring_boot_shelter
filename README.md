@@ -35,6 +35,7 @@ Depending on the user's role, some functionality of the service will be availabl
 - Architectural pattern: MVC
 - Interaction interface: RESTful
 - WebFlux: WebClient
+- Testing: JUnit5, Mockito
 - DBMS: PostgreSQL 13
 - ORM framework: Hibernate 
 - Containerization: Docker
