@@ -1,8 +1,10 @@
-package com.popugaevvn.spring_boot_shelter.repository.shelter;
+package com.popugaevvn.spring_boot_shelter.repository.shelter.impl;
 
 import com.popugaevvn.spring_boot_shelter.exceptions.NotFoundEntityException;
 import com.popugaevvn.spring_boot_shelter.models.Dog;
 import com.popugaevvn.spring_boot_shelter.models.Shelter;
+import com.popugaevvn.spring_boot_shelter.repository.shelter.ShelterRepository;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -13,14 +15,16 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
+@RequiredArgsConstructor
 public class ShelterRepositoryHibernateImpl implements ShelterRepository {
 
-    private final SessionFactory sessionFactory =
-            new Configuration()
-                    .configure()
-                    .addAnnotatedClass(Shelter.class)
-                    .addAnnotatedClass(Dog.class)
-                    .buildSessionFactory();
+    private final SessionFactory sessionFactory;
+//            =
+//            new Configuration()
+//                    .configure()
+//                    .addAnnotatedClass(Shelter.class)
+//                    .addAnnotatedClass(Dog.class)
+//                    .buildSessionFactory();
 
     @Override
     public List<Shelter> index() {

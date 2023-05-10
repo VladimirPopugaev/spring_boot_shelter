@@ -3,32 +3,33 @@ package com.popugaevvn.spring_boot_shelter.services.dog;
 import com.popugaevvn.spring_boot_shelter.api.request.dog.DogRequest;
 import com.popugaevvn.spring_boot_shelter.api.response.dog.DogResponse;
 import com.popugaevvn.spring_boot_shelter.models.Dog;
-import com.popugaevvn.spring_boot_shelter.repository.dog.DogRepository;
+import com.popugaevvn.spring_boot_shelter.repository.dog.DogRepositoryHibernateAuto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class DogServiceImpl implements DogService {
 
-    private final DogRepository repository;
+    private final DogRepositoryHibernateAuto repository;
 
     @Override
     public DogResponse getDogById(int id) {
-        Dog dog = repository.getDogById(id);
+        Dog dog = repository.getReferenceById(id);
 
         return convertFromDogToResponse(dog);
     }
 
     @Override
     public Dog getDogAllInfo(int id) {
-        return repository.getDogById(id);
+        return repository.getReferenceById(id);
     }
 
     @Override
     public List<DogResponse> getYoungerDogs(byte maxAge) {
-        List<Dog> dogList = repository.getYoungerDog(maxAge);
+        List<Dog> dogList = repository.findDogsByAgeLessThan(maxAge);
 
         return dogList.stream().map(DogServiceImpl::convertFromDogToResponse).toList();
     }
@@ -50,18 +51,18 @@ public class DogServiceImpl implements DogService {
 
     @Override
     public DogResponse updateDog(int dogId, DogRequest newInfoAboutDog) {
-        Dog unupdatedDog = repository.getDogById(dogId);
+        Dog unupdatedDog = repository.getReferenceById(dogId);
         Dog dogForUpdate = convertToDog(newInfoAboutDog);
         dogForUpdate.setId(unupdatedDog.getId());
         dogForUpdate.setShelter(unupdatedDog.getShelter());
 
-        Dog updatedDog = repository.updateDog(dogForUpdate);
+        Dog updatedDog = repository.save(dogForUpdate);
         return convertFromDogToResponse(updatedDog);
     }
 
     @Override
     public void deleteDog(int dogId) {
-        repository.deleteDog(dogId);
+        repository.deleteById(dogId);
     }
 
     /**

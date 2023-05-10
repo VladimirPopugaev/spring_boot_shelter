@@ -1,9 +1,15 @@
 version: '3.9'
 
+networks:
+  shelter-network:
+    driver: bridge
+
 services:
-  shelter_service_db:
-    container_name: shelter_service_db
+  shelter-service-db:
+    container_name: shelter-service-db
     image: postgres
+    networks:
+      - shelter-network
     ports:
       - "5432:5432"
     environment:
@@ -13,17 +19,19 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
-#  api:
-#    container_name: shelter-api
-#    image: spring-boot-api-shelter-img
-#    build:
-#      context: ./
-#      dockerfile: Dockerfile
-#    depends_on:
-#      - shelter_service_db
-#    ports:
-#      - 8080:8080
-#    restart: always
+  api:
+    container_name: shelter-api
+    image: spring-boot-api-shelter-img
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    networks:
+      - shelter-network
+    depends_on:
+      - shelter-service-db
+    ports:
+      - 8080:8080
+    restart: always
 
 volumes:
   pgdata: {}

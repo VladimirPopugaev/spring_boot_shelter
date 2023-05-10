@@ -5,7 +5,9 @@ import com.popugaevvn.spring_boot_shelter.api.response.shelter.ShelterMultiRespo
 import com.popugaevvn.spring_boot_shelter.api.response.shelter.ShelterSingleResponse;
 import com.popugaevvn.spring_boot_shelter.models.Dog;
 import com.popugaevvn.spring_boot_shelter.models.Shelter;
-import com.popugaevvn.spring_boot_shelter.repository.shelter.ShelterRepository;
+import com.popugaevvn.spring_boot_shelter.repository.dog.DogRepositoryHibernateAuto;
+import com.popugaevvn.spring_boot_shelter.repository.shelter.ShelterRepositoryHibernateAuto;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,17 +17,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ShelterServiceImpl implements ShelterService {
 
-    private final ShelterRepository shelterRepository;
+    private final ShelterRepositoryHibernateAuto shelterRepository;
+    private final DogRepositoryHibernateAuto dogRepository;
 
     @Override
     public ShelterSingleResponse getShelterById(int id) {
-        Shelter shelter = shelterRepository.getShelterById(id);
+        Shelter shelter = shelterRepository.getReferenceById(id);
         return shelterToSingleResponse(shelter);
     }
 
     @Override
     public List<ShelterMultiResponse> getListOfShelters() {
-        List<Shelter> shelters = shelterRepository.index();
+        List<Shelter> shelters = shelterRepository.findAll();
 
         return shelters.stream().map(ShelterServiceImpl::shelterToMultiResponse).toList();
     }
@@ -39,8 +42,11 @@ public class ShelterServiceImpl implements ShelterService {
     }
 
     @Override
+    @Transactional
     public ShelterSingleResponse addDogInShelter(int shelterId, Dog dog) {
-        Shelter shelter = shelterRepository.addDogInShelter(shelterId, dog);
+        Shelter shelter = shelterRepository.getReferenceById(shelterId);
+        shelter.addDog(dog);
+        shelterRepository.save(shelter);
 
         return shelterToSingleResponse(shelter);
     }
@@ -50,13 +56,13 @@ public class ShelterServiceImpl implements ShelterService {
         Shelter shelterForUpdating = shelterRequestToShelter(infoForUpdateShelter);
         shelterForUpdating.setId(shelterId);
 
-        Shelter updatedShelter = shelterRepository.updateShelter(shelterForUpdating);
+        Shelter updatedShelter = shelterRepository.save(shelterForUpdating);
         return shelterToSingleResponse(updatedShelter);
     }
 
     @Override
     public void deleteShelter(int shelterId) {
-        shelterRepository.deleteShelter(shelterId);
+        shelterRepository.deleteById(shelterId);
     }
 
     private static ShelterSingleResponse shelterToSingleResponse(Shelter shelter) {

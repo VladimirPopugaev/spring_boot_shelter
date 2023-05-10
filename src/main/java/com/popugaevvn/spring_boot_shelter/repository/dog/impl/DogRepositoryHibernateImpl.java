@@ -1,8 +1,9 @@
-package com.popugaevvn.spring_boot_shelter.repository.dog;
+package com.popugaevvn.spring_boot_shelter.repository.dog.impl;
 
 import com.popugaevvn.spring_boot_shelter.exceptions.NotFoundEntityException;
 import com.popugaevvn.spring_boot_shelter.models.Dog;
 import com.popugaevvn.spring_boot_shelter.models.Shelter;
+import com.popugaevvn.spring_boot_shelter.repository.dog.DogRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
+//@Repository
 public class DogRepositoryHibernateImpl implements DogRepository {
 
     private final SessionFactory sessionFactory =

@@ -21,6 +21,12 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // TODO: exclude few requests
-        registry.addInterceptor(authInterceptor);
+        registry.addInterceptor(authInterceptor)
+                .addPathPatterns("/**")
+                .excludePathPatterns(
+                        "/swagger**/**","/doc.html","/webjars/**", "/v3/**"
+                );
+
+        WebMvcConfigurer.super.addInterceptors(registry);
     }
 }

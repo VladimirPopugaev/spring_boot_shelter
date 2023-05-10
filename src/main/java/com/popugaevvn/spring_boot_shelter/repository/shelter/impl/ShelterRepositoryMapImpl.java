@@ -1,8 +1,9 @@
-package com.popugaevvn.spring_boot_shelter.repository.shelter;
+package com.popugaevvn.spring_boot_shelter.repository.shelter.impl;
 
 import com.popugaevvn.spring_boot_shelter.exceptions.NotFoundEntityException;
 import com.popugaevvn.spring_boot_shelter.models.Dog;
 import com.popugaevvn.spring_boot_shelter.models.Shelter;
+import com.popugaevvn.spring_boot_shelter.repository.shelter.ShelterRepository;
 
 import java.util.HashMap;
 import java.util.List;
