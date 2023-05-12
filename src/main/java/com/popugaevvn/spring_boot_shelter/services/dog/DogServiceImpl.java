@@ -5,6 +5,8 @@ import com.popugaevvn.spring_boot_shelter.api.response.dog.DogResponse;
 import com.popugaevvn.spring_boot_shelter.models.Dog;
 import com.popugaevvn.spring_boot_shelter.repository.dog.DogRepositoryHibernateAuto;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,12 +15,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DogServiceImpl implements DogService {
 
+    private static final Logger LOGGER = LogManager.getLogger(DogServiceImpl.class);
+
     private final DogRepositoryHibernateAuto repository;
 
     @Override
     public DogResponse getDogById(int id) {
         Dog dog = repository.getReferenceById(id);
-
+        LOGGER.info("Fetch dog from DB with id: " + id);
         return convertFromDogToResponse(dog);
     }
 
@@ -45,7 +49,7 @@ public class DogServiceImpl implements DogService {
     public DogResponse createDog(DogRequest dogRequest) {
         Dog dog = convertToDog(dogRequest);
         repository.save(dog);
-
+        LOGGER.info("Dog was created. Info: " + dog);
         return convertFromDogToResponse(dog);
     }
 
@@ -57,12 +61,14 @@ public class DogServiceImpl implements DogService {
         dogForUpdate.setShelter(unupdatedDog.getShelter());
 
         Dog updatedDog = repository.save(dogForUpdate);
+        LOGGER.info("Dog was updated. Updated dog id: " + dogId);
         return convertFromDogToResponse(updatedDog);
     }
 
     @Override
     public void deleteDog(int dogId) {
         repository.deleteById(dogId);
+        LOGGER.info("Dog wtih id = " + dogId + " was deleted");
     }
 
     /**

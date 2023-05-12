@@ -6,6 +6,8 @@ import com.popugaevvn.spring_boot_shelter.utils.servletRequest.ServletRequestUti
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -13,16 +15,22 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @RequiredArgsConstructor
 public class AuthInterceptor implements HandlerInterceptor {
 
+    private static final Logger LOGGER = LogManager.getLogger(AuthInterceptor.class);
+
     private final AuthService authService;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String token = request.getHeader("Authorization");
-        if (token == null || !token.startsWith("Bearer ")) throw new AuthorizedErrorException("Not authorized");
+        if (token == null || !token.startsWith("Bearer ")) {
+            LOGGER.error("Not valid token for request " + request.getRequestURI());
+            throw new AuthorizedErrorException("Not authorized");
+        }
 
         String cookieAuthService = ServletRequestUtils.getCookieByKey(request, "_auth_service_key");
 
         if (!authService.isAuthorize(token, cookieAuthService)) {
+            LOGGER.error("User with token + " + token + "is not authorized");
             throw new AuthorizedErrorException("Not authorized");
         }
 

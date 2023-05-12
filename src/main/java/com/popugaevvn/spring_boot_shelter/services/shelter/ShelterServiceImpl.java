@@ -5,10 +5,11 @@ import com.popugaevvn.spring_boot_shelter.api.response.shelter.ShelterMultiRespo
 import com.popugaevvn.spring_boot_shelter.api.response.shelter.ShelterSingleResponse;
 import com.popugaevvn.spring_boot_shelter.models.Dog;
 import com.popugaevvn.spring_boot_shelter.models.Shelter;
-import com.popugaevvn.spring_boot_shelter.repository.dog.DogRepositoryHibernateAuto;
 import com.popugaevvn.spring_boot_shelter.repository.shelter.ShelterRepositoryHibernateAuto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,12 +18,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ShelterServiceImpl implements ShelterService {
 
+    private static final Logger LOGGER = LogManager.getLogger(ShelterServiceImpl.class);
+
     private final ShelterRepositoryHibernateAuto shelterRepository;
-    private final DogRepositoryHibernateAuto dogRepository;
 
     @Override
     public ShelterSingleResponse getShelterById(int id) {
         Shelter shelter = shelterRepository.getReferenceById(id);
+        LOGGER.info("Fetch shelter from DB with id: " + id);
         return shelterToSingleResponse(shelter);
     }
 
@@ -38,6 +41,7 @@ public class ShelterServiceImpl implements ShelterService {
         Shelter newShelter = shelterRequestToShelter(request);
         shelterRepository.save(newShelter);
 
+        LOGGER.info("Dog was created. Info: " + newShelter);
         return shelterToSingleResponse(newShelter);
     }
 
@@ -47,7 +51,7 @@ public class ShelterServiceImpl implements ShelterService {
         Shelter shelter = shelterRepository.getReferenceById(shelterId);
         shelter.addDog(dog);
         shelterRepository.save(shelter);
-
+        LOGGER.info("In shelter with id = " + shelterId + " was added new dog. Dog info: " + dog);
         return shelterToSingleResponse(shelter);
     }
 
@@ -57,12 +61,14 @@ public class ShelterServiceImpl implements ShelterService {
         shelterForUpdating.setId(shelterId);
 
         Shelter updatedShelter = shelterRepository.save(shelterForUpdating);
+        LOGGER.info("Shelter with id = " + shelterId + " was updated.");
         return shelterToSingleResponse(updatedShelter);
     }
 
     @Override
     public void deleteShelter(int shelterId) {
         shelterRepository.deleteById(shelterId);
+        LOGGER.info("Shelter with id = " + shelterId + " was deleted");
     }
 
     private static ShelterSingleResponse shelterToSingleResponse(Shelter shelter) {
