@@ -1,4 +1,4 @@
-package com.popugaevvn.spring_boot_shelter.exceptions;
+package com.popugaevvn.spring_boot_shelter.api.exceptions;
 
 public class AuthorizedErrorException extends RuntimeException {
 

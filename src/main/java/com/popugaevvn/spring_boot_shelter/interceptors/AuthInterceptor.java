@@ -1,6 +1,6 @@
 package com.popugaevvn.spring_boot_shelter.interceptors;
 
-import com.popugaevvn.spring_boot_shelter.exceptions.AuthorizedErrorException;
+import com.popugaevvn.spring_boot_shelter.api.exceptions.AuthorizedErrorException;
 import com.popugaevvn.spring_boot_shelter.services.auth.AuthService;
 import com.popugaevvn.spring_boot_shelter.utils.servletRequest.ServletRequestUtils;
 import jakarta.servlet.http.HttpServletRequest;
