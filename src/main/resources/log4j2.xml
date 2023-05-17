@@ -16,6 +16,7 @@
             <PatternLayout>
                 <Pattern>${LOG_PATTERN}</Pattern>
             </PatternLayout>
+
             <Policies>
                 <SizeBasedTriggeringPolicy size="10MB"/>
             </Policies>
@@ -32,12 +33,30 @@
             </Policies>
             <DefaultRolloverStrategy max="10"/>
         </RollingFile>
+
+        <RollingFile name="JsonFileAppender" fileName="logs/log_history_json.log"
+                     filePattern="logs/log_history_json-%d{yyyy-MM-dd}-%i.log">
+
+            <JSONLayout compact="true" eventEol="true" properties="true" stacktraceAsString="true" includeTimeMillis="true">
+                <!--  Project properties -->
+                <KeyValuePair key="appName" value="${project.name}" />
+                <KeyValuePair key="version" value="${project.version}" />
+                <KeyValuePair key="appType" value="${app.type}" />
+            </JSONLayout>
+
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
     </Appenders>
     <Loggers>
         <Root level="info">
             <AppenderRef ref="ConsoleAppender"/>
             <AppenderRef ref="FileAppender"/>
             <AppenderRef ref="ErrorFileAppender" level="error"/>
+            <AppenderRef ref="JsonFileAppender"/>
         </Root>
     </Loggers>
 </Configuration>
