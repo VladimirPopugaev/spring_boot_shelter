@@ -19,19 +19,59 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
-  api:
-    container_name: shelter-api
-    image: spring-boot-api-shelter-img
-    build:
-      context: ./
-      dockerfile: Dockerfile
+  #  api:
+  #    container_name: shelter-api
+  #    image: spring-boot-api-shelter-img
+  #    build:
+  #      context: ./
+  #      dockerfile: Dockerfile
+  #    networks:
+  #      - shelter-network
+  #    depends_on:
+  #      - shelter-service-db
+  #    ports:
+  #      - 8080:8080
+  #    restart: always
+
+  elasticsearch:
+    image: elasticsearch:8.7.1
+    container_name: elasticsearch
+    volumes:
+      - ./volumes/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
       - shelter-network
-    depends_on:
-      - shelter-service-db
+
+  logstash:
+    image: logstash:8.7.1
+    container_name: logstash
+    command: -f /etc/logstash/conf.d/
+    volumes:
+      - ./volumes/logstash/:/etc/logstash/conf.d/
     ports:
-      - 8080:8080
-    restart: always
+      - "9999:9999"
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    depends_on:
+      - elasticsearch
+    networks:
+      - shelter-network
+
+  kibana:
+    image: kibana:8.7.1
+    container_name: kibana
+    volumes:
+      - ./volumes/kibana/:/usr/share/kibana/config/
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    networks:
+      - shelter-network
 
 volumes:
-  pgdata: {}
+  pgdata: { }

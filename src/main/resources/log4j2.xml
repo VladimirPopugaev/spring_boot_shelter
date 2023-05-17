@@ -50,6 +50,13 @@
             <DefaultRolloverStrategy max="10"/>
         </RollingFile>
 
+        <Socket name="socket"
+                host="${sys:logstash.host.name:-localhost}"
+                port="${sys:logstash.port.number:-9999}"
+                reconnectionDelayMillis="5000">
+            <PatternLayout pattern="${LOG_PATTERN}" />
+        </Socket>
+
     </Appenders>
     <Loggers>
         <Root level="info">
@@ -57,6 +64,7 @@
             <AppenderRef ref="FileAppender"/>
             <AppenderRef ref="ErrorFileAppender" level="error"/>
             <AppenderRef ref="JsonFileAppender"/>
+            <AppenderRef ref="socket"/>
         </Root>
     </Loggers>
 </Configuration>
