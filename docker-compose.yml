@@ -1,77 +1,111 @@
-version: '3.9'
+services:
+
+    shelter-service-db:
+        container_name: shelter-service-db
+        image: postgres
+        networks:
+            - shared_network
+        ports:
+            - "5432:5432"
+        environment:
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_USER: postgres
+            POSTGRES_DB: postgres
+        volumes:
+            - pgdata:/var/lib/postgresql/data
+
+    shelter_service:
+        container_name: shelter_service
+        image: api-shelter
+        build:
+            context: ./spring_boot_shelter/
+            dockerfile: Dockerfile
+        networks:
+            - shared_network
+        depends_on:
+            - shelter-service-db
+            - auth_service
+        ports:
+            - 8080:8080
+        restart: always
+
+    elasticsearch:
+        image: elasticsearch:8.7.1
+        container_name: elasticsearch
+        volumes:
+            - ./spring_boot_shelter/volumes/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+        ports:
+            - "9200:9200"
+            - "9300:9300"
+        environment:
+            ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+        networks:
+            - shared_network
+
+    logstash:
+        image: logstash:8.7.1
+        container_name: logstash
+        command: -f /etc/logstash/conf.d/
+        volumes:
+            - ./spring_boot_shelter/volumes/logstash/:/etc/logstash/conf.d/
+        ports:
+            - "9999:9999"
+        environment:
+            LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+        depends_on:
+            - elasticsearch
+        networks:
+            - shared_network
+
+    kibana:
+        image: kibana:8.7.1
+        container_name: kibana
+        volumes:
+            - ./spring_boot_shelter/volumes/kibana/:/usr/share/kibana/config/
+        ports:
+            - "5601:5601"
+        depends_on:
+            - elasticsearch
+        networks:
+            - shared_network
+
+    grafana:
+        build: './spring_boot_shelter/volumes/grafana'
+        ports:
+            - 3000:3000
+        volumes:
+            - ./spring_boot_shelter/volumes/grafana:/var/lib/grafana
+        environment:
+            - GF_SECURITY_ADMIN_USER=admin
+            - GF_SECURITY_ADMIN_PASSWORD=admin
+        networks:
+            shared_network:
+                aliases:
+                    - grafana
+
+    prometheus:
+        image: prom/prometheus
+        ports:
+            - 9090:9090
+        volumes:
+            - ./spring_boot_shelter/volumes/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+            - ./spring_boot_shelter/volumes/prometheus:/prometheus
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+        networks:
+            shared_network:
+                aliases:
+                    - prometheus
 
 networks:
-  shelter-network:
-    driver: bridge
-
-services:
-  shelter-service-db:
-    container_name: shelter-service-db
-    image: postgres
-    networks:
-      - shelter-network
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_DB: postgres
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-
-  #  api:
-  #    container_name: shelter-api
-  #    image: spring-boot-api-shelter-img
-  #    build:
-  #      context: ./
-  #      dockerfile: Dockerfile
-  #    networks:
-  #      - shelter-network
-  #    depends_on:
-  #      - shelter-service-db
-  #    ports:
-  #      - 8080:8080
-  #    restart: always
-
-  elasticsearch:
-    image: elasticsearch:8.7.1
-    container_name: elasticsearch
-    volumes:
-      - ./volumes/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-    ports:
-      - "9200:9200"
-      - "9300:9300"
-    environment:
-      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
-    networks:
-      - shelter-network
-
-  logstash:
-    image: logstash:8.7.1
-    container_name: logstash
-    command: -f /etc/logstash/conf.d/
-    volumes:
-      - ./volumes/logstash/:/etc/logstash/conf.d/
-    ports:
-      - "9999:9999"
-    environment:
-      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
-    depends_on:
-      - elasticsearch
-    networks:
-      - shelter-network
-
-  kibana:
-    image: kibana:8.7.1
-    container_name: kibana
-    volumes:
-      - ./volumes/kibana/:/usr/share/kibana/config/
-    ports:
-      - "5601:5601"
-    depends_on:
-      - elasticsearch
-    networks:
-      - shelter-network
+    shared_network:
+        name: shared_network
+        driver: bridge
+        #attachable: true # Needed in order to run custom commands in the container
 
 volumes:
-  pgdata: { }
+    pgdata: {}
+
+#volumes:
+#    pg-data:
+#        external: true # Must use "docker volume create --name=pg-data before

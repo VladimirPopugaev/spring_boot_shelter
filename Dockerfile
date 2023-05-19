@@ -1,20 +1,27 @@
-# AS <NAME> to name this stage as maven
-FROM maven:3.9.1-amazoncorretto-19 AS maven
-LABEL MAINTAINER="popugaevvn1@gmail.com"
+FROM maven:3.9.1-amazoncorretto-19 as maven-builder
 
-WORKDIR /
-COPY . /
-# Compile and package the application to an executable JAR
-RUN mvn package
+WORKDIR /tmp
 
-# For Java 19,
-FROM amazoncorretto:19.0.2-alpine
+COPY . ./
 
-ARG JAR_FILE=spring_boot_shelter-0.0.1-SNAPSHOT.jar
+ENV MAVEN_OPTS="-Xmx1024m -XX:MaxMetaspaceSize=128m"
+
+RUN mvn clean package -DskipTests=true
+
+FROM openjdk:19-alpine
+
+ENV JAR_FILE=target/*.jar
+
+COPY --from=maven-builder /tmp/$JAR_FILE /opt/app/
+RUN mv /opt/app/*.jar /opt/app/app.jar
 
 WORKDIR /opt/app
 
-# Copy the spring-boot-api-tutorial.jar from the maven stage to the /opt/app directory of the current stage.
-COPY --from=maven /target/${JAR_FILE} /opt/app/
+RUN chgrp -R 0 /opt/app && \
+    chmod -R g=u /opt/app
 
-ENTRYPOINT ["java","-jar","spring_boot_shelter-0.0.1-SNAPSHOT.jar"]
+ENV PORT 8080
+
+EXPOSE 8080
+
+ENTRYPOINT ["java","-Dlogstash.host.name=logstash","-Dlogstash.port.number=9999","-jar","app.jar"]

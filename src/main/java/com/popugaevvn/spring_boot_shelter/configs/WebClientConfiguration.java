@@ -17,7 +17,9 @@ import reactor.netty.http.client.HttpClient;
 @Configuration
 public class WebClientConfiguration {
 
-    private final static String BASE_URL = "http://localhost:4001/api";
+    private final static String BASE_URL = "http://host.docker.internal:4001/api";
+    // for local development
+//     private final static String BASE_URL = "http://localhost:4001/api";
 
     @Bean
     public WebClient getWebClientBuilder(WebClient.Builder webClientBuilder) {

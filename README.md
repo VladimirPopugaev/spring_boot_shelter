@@ -2,31 +2,44 @@
 
 ## How to run
 
-*At this point you will need **JDK 19** to start the project. I am working on that.*
+1. Move the `docker-compose.yaml` file from the current directory (with the project) to 
+the previous directory (`../`)
 
-1. You need `postgres` image from official image of **docker hub** (https://hub.docker.com/_/postgres).
+OR
 
-2. Start container creation from the command line. To do this, type ```docker-compose up -d``` in directory of project. Or use the capabilities of the IDE to start the docker container.
+1. Change the context paths for the build and config folders to the current directory 
+(instead of `./spring_boot_shelter/` write `./`).
 
-3. Start main method from class `SpringBootShelterApplication`.
+2. Start container creation from the command line. To do this, type ```docker-compose up --build -d``` 
+in directory with `docker-compose.yml`.
 
-4. Go to your browser and type `http::/localhost:8080/swagger-ui.html` in the search box. This will take you to the next page:
+3. Go to your browser and type `http::/localhost:8080/swagger-ui.html` in the search box. 
+This will take you to the next page:
 
 ![img_1.png](img_1.png)
 
 ##### Now you can check other endpoints of my project. Thank you!
+
+## Monitoring system
+
+Prometheus and Grafana tools are used for system monitoring to graphically display.
+To view the collected statistics, launch the application and go to `http://localhost:3000`
+
+Two dashboards are collected automatically: one to collect *JVM statistics* and the other 
+to collect *query statistics*
+
+Below is a screenshot of the dashboard for collecting JVM statistics:
+
+![grafana.png](grafana.png)
 
 ## About project
 The project is for CRUD operations for a dog shelter. It 
 organizes communication between two entities (dogs and shelters). 
 They have a *one to many* and *many to one* relationship. 
 
-(A little later a microservice responsible for authorizing users with 
-different roles will be attached here. This microservice has already 
-been implemented. Link: https://github.com/VladimirPopugaev/auth_service_elixir).
+User authentication using an authorization microservice is used to access the methods.
+In my case, this service is another project: https://github.com/VladimirPopugaev/auth_service_elixir
 Interaction with the server is performed using WebClient.
-
-Depending on the user's role, some functionality of the service will be available or not available to him.
 
 ## Technology stack
 
@@ -38,6 +51,8 @@ Depending on the user's role, some functionality of the service will be availabl
 - Testing: JUnit5, Mockito
 - DBMS: PostgreSQL 13
 - ORM framework: Hibernate 
-- Containerization: Docker
+- Containerization: Docker compose
+- Logging system: log4j2 + ELK stack
+- Monitoring system: Prometheus + Grafana
 - Java version: 19
 - Version control system: Github
