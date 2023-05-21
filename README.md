@@ -32,6 +32,13 @@ Below is a screenshot of the dashboard for collecting JVM statistics:
 
 ![grafana.png](grafana.png)
 
+## CI/CD
+
+When you change the master of a branch, three workflows are started:
+1. Building the application and checking the amount of test coverage of the application.
+2. Running the SonarCloud static analyzer
+3. Building a Docker image and publishing it in DockerHub
+
 ## About project
 The project is for CRUD operations for a dog shelter. It 
 organizes communication between two entities (dogs and shelters). 
