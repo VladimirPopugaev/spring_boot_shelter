@@ -15,6 +15,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '19'
+          distribution: 'temurin'
 
       - name: Analyze with SonarCloud
         #       set environment variables:
