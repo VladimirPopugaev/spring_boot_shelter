@@ -18,13 +18,12 @@ services:
         container_name: shelter_service
         image: api-shelter
         build:
-            context: ./spring_boot_shelter/
+            context: ./
             dockerfile: Dockerfile
         networks:
             - shared_network
         depends_on:
             - shelter-service-db
-            - auth_service
         ports:
             - 8080:8080
         restart: always
@@ -33,7 +32,7 @@ services:
         image: elasticsearch:8.7.1
         container_name: elasticsearch
         volumes:
-            - ./spring_boot_shelter/volumes/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+            - ./volumes/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
         ports:
             - "9200:9200"
             - "9300:9300"
@@ -47,7 +46,7 @@ services:
         container_name: logstash
         command: -f /etc/logstash/conf.d/
         volumes:
-            - ./spring_boot_shelter/volumes/logstash/:/etc/logstash/conf.d/
+            - ./volumes/logstash/:/etc/logstash/conf.d/
         ports:
             - "9999:9999"
         environment:
@@ -61,7 +60,7 @@ services:
         image: kibana:8.7.1
         container_name: kibana
         volumes:
-            - ./spring_boot_shelter/volumes/kibana/:/usr/share/kibana/config/
+            - ./volumes/kibana/:/usr/share/kibana/config/
         ports:
             - "5601:5601"
         depends_on:
@@ -70,11 +69,11 @@ services:
             - shared_network
 
     grafana:
-        build: './spring_boot_shelter/volumes/grafana'
+        build: './volumes/grafana'
         ports:
             - 3000:3000
         volumes:
-            - ./spring_boot_shelter/volumes/grafana:/var/lib/grafana
+            - ./volumes/grafana:/var/lib/grafana
         environment:
             - GF_SECURITY_ADMIN_USER=admin
             - GF_SECURITY_ADMIN_PASSWORD=admin
@@ -88,8 +87,8 @@ services:
         ports:
             - 9090:9090
         volumes:
-            - ./spring_boot_shelter/volumes/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-            - ./spring_boot_shelter/volumes/prometheus:/prometheus
+            - ./volumes/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+            - ./volumes/prometheus:/prometheus
         extra_hosts:
             - "host.docker.internal:host-gateway"
         networks:
