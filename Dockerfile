@@ -20,8 +20,8 @@ WORKDIR /opt/app
 RUN chgrp -R 0 /opt/app && \
     chmod -R g=u /opt/app
 
-ENV PORT 8080
+#ENV PORT 8080
 
-EXPOSE 8080
+#EXPOSE 8080
 
 ENTRYPOINT ["java","-Dlogstash.host.name=logstash","-Dlogstash.port.number=9999","-jar","app.jar"]

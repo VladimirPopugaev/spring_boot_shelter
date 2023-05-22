@@ -13,10 +13,14 @@ OR
 2. Start container creation from the command line. To do this, type ```docker-compose up --build -d``` 
 in directory with `docker-compose.yml`.
 
-3. Go to your browser and type `http::/localhost:8080/swagger-ui.html` in the search box. 
+3. Go to your browser and type `http::/localhost:9070/swagger-ui.html` in the search box. 
 This will take you to the next page:
 
 ![img_1.png](img_1.png)
+
+4. **After starting the containers you will have 2 services up on ports 8181 and 8282. 
+The nginx server is used as a load balancer to access these services. 
+So use http::/localhost:9070/ to communicate with the application.**
 
 ##### Now you can check other endpoints of my project. Thank you!
 
@@ -52,6 +56,7 @@ Interaction with the server is performed using WebClient.
 
 - Framework: Spring Boot 3
 - Assembly system: Maven 4.0
+- Server: Nginx
 - Architectural pattern: MVC
 - Interaction interface: RESTful
 - WebFlux: WebClient
